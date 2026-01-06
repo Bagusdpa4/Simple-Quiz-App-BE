@@ -7,8 +7,8 @@ const {
 const { restrict } = require("../middlewares/auth.middlewares");
 
 // API Profile Users
-router.get("/users/profile", restrict, getDetail);
-router.put("/users/profile", restrict, updateProfile);
-router.put("/users/profile/change-password", restrict, updatePass);
+router.get("/profiles/detail", restrict, getDetail);
+router.put("/profiles/update", restrict, updateProfile);
+router.put("/profiles/update-password", restrict, updatePass);
 
 module.exports = router;

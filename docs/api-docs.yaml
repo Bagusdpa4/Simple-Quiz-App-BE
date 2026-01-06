@@ -82,7 +82,7 @@ paths:
         401:
           description: Kredensial salah
 
-  /users/authenticate:
+  /auth/me:
     get:
       tags:
         - "Auth"

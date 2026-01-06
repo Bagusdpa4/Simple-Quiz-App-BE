@@ -9,9 +9,9 @@ const { restrict } = require("../middlewares/auth.middlewares");
 const passport = require("../libs/passport");
 
 // API Auth Users
-router.post("/users/register", register);
-router.post("/users/login", login);
-router.get("/users/authenticate", restrict, auth);
+router.post("/auth/register", register);
+router.post("/auth/login", login);
+router.get("/auth/me", restrict, auth);
 
 // Google OAuth
 router.get(
