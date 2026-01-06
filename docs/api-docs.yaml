@@ -3,15 +3,16 @@ info:
   title: Quiz Master API
   description: Dokumentasi API untuk Website Quiz Master mencakup Autentikasi dan Manajemen Profil.
   version: 1.0.0
+
 servers:
   - url: http://localhost:3000/api/v1
     description: Local server
-  - url: https://api.quizmaster.com/api/v1
+  - url: https://simple-quiz-app-be.vercel.app/api/v1
     description: Production server
 
 tags:
   - name: "Auth"
-    description: Operasi seputar Autentikasi (Register & Login)
+    description: Operasi seputar Autentikasi
   - name: "Profiles"
     description: Operasi seputar Profil User
 
@@ -42,7 +43,7 @@ paths:
         201:
           description: User berhasil dibuat
         400:
-          description: Validasi gagal atau password tidak cocok
+          description: Validasi gagal
 
   /auth/login:
     post:
@@ -63,9 +64,60 @@ paths:
                   type: string
       responses:
         200:
-          description: Login berhasil, mengembalikan token
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
         401:
           description: Kredensial salah
+
+  /users/authenticate:
+    get:
+      tags:
+        - "Auth"
+      summary: Authenticate current user
+      description: Mendapatkan data profil user yang sedang login menggunakan token.
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Berhasil mendapatkan data user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/User"
+        403:
+          description: Token tidak valid atau tidak disediakan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        404:
+          description: User tidak ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/google:
     get:
@@ -81,16 +133,23 @@ paths:
     get:
       tags:
         - "Profiles"
-      summary: Mendapatkan detail profil user yang sedang login
+      summary: Mendapatkan detail profil (sama dengan authenticate)
       security:
         - bearerAuth: []
       responses:
         200:
-          description: Detail profil berhasil diambil
+          description: Sukses
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
 
   /profiles/update:
     put:
@@ -112,12 +171,24 @@ paths:
                 birth_date:
                   type: string
                   format: date
+                  example: "1990-01-01"
                 avatar_url:
                   type: string
                   format: binary
       responses:
         200:
           description: Profil berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/User'
 
   /profiles/update-password:
     put:
@@ -153,30 +224,50 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+        message:
+          type: string
+        data:
+          type: object
+          nullable: true
+          example: null
+          
     User:
       type: object
       properties:
         id:
           type: integer
+          example: 1
         fullname:
           type: string
+          example: "Budi Setiadi"
         email:
           type: string
+          example: "budi@gmail.com"
         google_id:
           type: string
           nullable: true
         profile:
           $ref: '#/components/schemas/Profile'
+
     Profile:
       type: object
       properties:
         id:
           type: integer
+          example: 10
         avatar_url:
           type: string
           nullable: true
+          example: "https://ik.imagekit.io/your_id/avatar.png"
         birth_date:
           type: string
-          format: date
+          example: "1995-05-20"
         city:
           type: string
+          example: "Jakarta"
