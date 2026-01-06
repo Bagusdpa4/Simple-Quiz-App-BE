@@ -15,13 +15,13 @@ router.get("/auth/me", restrict, auth);
 
 // Google OAuth
 router.get(
-  "/users/google",
+  "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 router.get(
-  "/users/google/callback",
+  "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/users/google",
+    failureRedirect: "/auth/google",
     session: false,
   }),
   googleOauth2
