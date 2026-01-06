@@ -42,6 +42,19 @@ paths:
       responses:
         201:
           description: User berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "OK"
+                  data:
+                    $ref: "#/components/schemas/User"
         400:
           description: Validasi gagal
 
