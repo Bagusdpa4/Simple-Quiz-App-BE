@@ -198,7 +198,7 @@ module.exports = {
             profile: {
               create: {
                 city: "",
-                birth_date: "",
+                birth_date: null,
                 avatar_url: user.picture || null,
               },
             },

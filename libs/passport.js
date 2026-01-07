@@ -35,7 +35,7 @@ passport.use(
                 create: {
                   city: "", // Default string sesuai skema
                   avatar_url: profile.photos?.[0]?.value || null,
-                  birth_date: "", 
+                  birth_date: null, 
                 },
               },
             },
